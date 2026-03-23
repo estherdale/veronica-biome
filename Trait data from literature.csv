@@ -1,0 +1,123 @@
+species,height.m,internode.mm,leaf.length.mm,leaf.width.mm,no.Flowers,inflorescence.cm,corolla.length.mm,corolla.width.mm,seed.length.mm,seed.width.mm,corolla.colour,corolla.colour.other,Source
+Veronica_adamsii,1,22,100,18,65,10,4,3,2.5,2,3,1,Bayly and Kellow 
+Veronica_albicans,1,9,42,16.3,45,5.1,6,1.8,1.8,1.1,1,,Bayly and Kellow 
+Veronica_amplexicaulis,0.5,8,21,12,25,4.6,4.8,,1.8,1.5,1,,Bayly and Kellow 
+Veronica_angustissima,1,14,75,9,95,11,4,0.9,1,0.8,2,1,Bayly and Kellow 
+Veronica_annulata,0.5,1.8,,2.9,10,0.7,1.7,1.2,1.3,0.8,1,,Bayly and Kellow 
+Veronica_arganthera,1.5,8,30,11,20,5,2.5,3.5,1.1,0.9,1,,Bayly and Kellow 
+Veronica_armstrongii,1,2.3,,2,8,0.7,1.7,1.6,1.3,0.8,3,1,Bayly and Kellow 
+Veronica_barkeri,13,17,79,15,39,7.6,2,1.9,2,1.4,2,,Bayly and Kellow 
+Veronica_baylyi,0.6,,12.3,7.4,22,3,2.7,2.1,,,1,,Bayly and Kellow 
+Veronica_benthamii,1,13,33,14.5,27,1.9,3.2,3.9,1.9,1.6,3,,Bayly and Kellow 
+Veronica_biggarii,0.3,10,15,8,25,4,1.8,2.5,1.3,0.8,2,1,Bayly and Kellow 
+Veronica_birleyi,0.1,5,7,6,2,0.6,3,10,1,0.7,1,,Garnock Jones & Lloyd 2004
+Veronica_bishopiana,1,24,90,18,170,17,4,2.1,,,2,1,Bayly and Kellow 
+Veronica_bollonsii,2.5,35,95,31,120,12,5,2.4,1.7,1.3,2,"1,3",Bayly and Kellow 
+Veronica_brachysiphon,1.8,7,25.5,8,36,4.1,3.5,2.2,,,1,,Bayly and Kellow 
+Veronica_breviracemosa,2,14,85,19,45,5,2.3,1.7,1,0.7,2,1,Bayly and Kellow 
+Veronica_buchananii,0.3,4,6,5,12,1.5,1.9,1.8,1.5,1,1,,Bayly and Kellow 
+Veronica_calcicola,1.4,15,38,9,45,7,1.2,,1.9,1.2,1,,Bayly and Kellow 
+Veronica_canterburiensis,1,6,15,6.5,12,3,3.5,1.5,1.7,1.4,1,,Bayly and Kellow 
+Veronica_catarractae,0.5,40,70,20,40,20,1.5,14,0.8,0.8,1,,Garnock Jones & Lloyd 2004
+Veronica_chathamica,0.25,17,33,16.5,40,4.1,4,2.3,1.6,1.3,2,1,Bayly and Kellow 
+Veronica_cheesemanii,0.04,4,3,3,2,1,7,7,1.1,0.7,1,,Garnock Jones & Lloyd 2004
+Veronica_chionohebe,0.005,,4.57,2.21,1,,3.45,1.59,0.77,0.54,1,,Meudt 2008
+Veronica_ciliolata,0.006,,4.32,2.89,1,0.82,8.2,6.52,1.04,0.74,1,,Meudt 2008
+Veronica_cockayneana,1.2,6.5,21.5,7.5,16,3.2,2.3,2.5,1.2,1.7,1,,Bayly and Kellow 
+Veronica_colensoi,0.4,5,27,9,21,3.3,2.3,1.5,1.5,0.9,1,,Bayly and Kellow 
+Veronica_colostylis,0.15,5,12,3,5,2.5,2.5,8,0.8,0.6,1,,Garnock Jones & Lloyd 2004
+Veronica_corriganii,2.5,22,105,16,120,14.5,5,2.4,2.2,1.7,2,1,Bayly and Kellow 
+Veronica_cryptomorpha,1.2,8,28,8,17,3.7,3,3,1.1,0.7,1,,Bayly and Kellow 
+Veronica_cupressoides,1.5,6.5,,3.7,22,3.7,1.4,1.1,1.1,0.6,2,"1,3",Bayly and Kellow 
+Veronica_decora,0.03,5,4,3,20,20,1,8,0.9,0.8,3,1,Garnock Jones & Lloyd 2005
+Veronica_decumbens,0.35,16.5,23.5,13,25,3,6,2,1.7,1.3,1,,Bayly and Kellow 
+Veronica_densifolia,0.005,,6.36,2.97,1,1.2,12.46,15.44,1.13,0.84,3,2,Meudt 2008
+Veronica_dieffenbachii,3,22,47,20,110,10,3.5,1.8,1.5,1.2,3,1,Bayly and Kellow 
+Veronica_dilatata,0.4,10,20,8,52,3.5,2.5,2.5,1.1,1,1,,Bayly and Kellow 
+Veronica_diosmifolia,2.5,9,20,6,54,3.5,2.5,2,2,1.3,2,"1,3",Bayly and Kellow 
+Veronica_elliptica,2,13,31,12,14,5.1,4,4,2,1.5,3,,Bayly and Kellow 
+Veronica_epacridea,0.4,3,8,5.5,8,2.6,4.8,2.2,1,0.7,1,,Bayly and Kellow 
+Veronica_evenosa,2,9,28,9,40,5,2,,1.5,1.3,1,,Bayly and Kellow 
+Veronica_flavida,8,20,100,20,140,16,3,2.7,1.4,1.2,2,"1,3",Bayly and Kellow 
+Veronica_gibbsii,0.35,6,20,13,25,3.5,4,2,1.7,0.9,1,,Bayly and Kellow 
+Veronica_glaucophylla,2,7,25,7,31,3.9,2.3,1.7,2.2,1.5,1,,Bayly and Kellow 
+Veronica_haastii,0.2,7,13,9.3,144,3.3,5.5,2,1.3,0.9,1,,Bayly and Kellow 
+Veronica_hectorii,1,1.9,2.7,4,16,1.5,3.3,2.6,1.4,0.8,1,,Bayly and Kellow 
+Veronica_hookeri,0.3,2,,8.5,6,1,2.3,2,1,,1,,Bayly and Kellow 
+Veronica_hookeriana,0.1,15,10,8,10,11,1.5,15,3,1.3,3,,Garnock Jones & Lloyd 2004
+Veronica_hulkeana,0.7,25,50,20,700,35,1.5,9,,,3,1,Garnock Jones 1993
+Veronica_insularis,0.5,10.5,32.5,13.5,46,4,4,3,1.2,0.8,2,"1,3",Bayly and Kellow 
+Veronica_jovellanoides,0.05,20,9,10,5,8,1,12,1.8,1.4,1,,Davidson et al 2009
+Veronica_kellowiae,0.15,5,7.5,5.5,2,1.7,2.8,1.5,0.8,0.6,1,,Bayly and Kellow 
+Veronica_lanceolata,0.3,20,30,15,25,20,1.5,12,0.9,0.8,1,,Garnock Jones & Lloyd 2004
+Veronica_lavaudiana,0.3,8,25,17,150,4,2,13,,,3,,Garnock Jones 1993
+Veronica_leiophylla,3,15,40,8,150,16.5,3,2.5,1.7,1.4,2,1,Bayly and Kellow 
+Veronica_ligustrifolia,2.5,10,50,10,70,8,3,2.2,1.5,1.1,2,1,Bayly and Kellow 
+Veronica_lilliputiana,0.01,5,2.5,1.5,1,1.2,1,10,0.5,0.3,2,,Garnock Jones & Lloyd 2004
+Veronica_linifolia,0.2,10,20,3.5,5,5,1.5,17,1,0.7,1,3,Garnock Jones & Lloyd 2004
+Veronica_lyallii,0.2,15,10,8,15,9,2,12,0.8,0.6,2,1,Garnock Jones & Lloyd 2004
+Veronica_lycopodioides,1,1.3,,3.3,16,1.6,3.2,1.3,1.5,0.7,1,,Bayly and Kellow 
+Veronica_maccaskillii,0.3,5,9,5,60,5,3,8,1.6,0.7,3,,Garnock Jones 1993
+Veronica_macrantha,0.3,14,30.2,13.5,7,5.7,5.3,4.5,2.7,2.2,1,,Bayly and Kellow 
+Veronica_macrocalyx,0.2,5.5,11,8,144,3,6,2.5,1,0.9,1,,Bayly and Kellow 
+Veronica_macrocarpa,3,41,110,22,85,13.2,5.5,4.2,2.5,1.7,3,"1,2",Bayly and Kellow 
+Veronica_masoniae,0.5,4,9,8,10,1.8,6,2,2.1,1.4,2,1,Bayly and Kellow 
+Veronica_melanocaulon,0.2,20,20,10,20,21,1.5,13,0.9,0.8,2,1,Garnock Jones & Lloyd 2004
+Veronica_mooreae,1.2,4,18,6,13,2.9,4,2.6,1.8,1.2,1,,Bayly and Kellow 
+Veronica_murrellii,0.2,4,9,5,50,3.5,2,2,1.1,0.8,1,,Bayly and Kellow 
+Veronica_notialis,0.2,2,5,4,2,1.35,3,1,1.5,1.2,1,,Bayly and Kellow 
+Veronica_obtusata,0.5,39,55,20,88,12.6,4,2,1.3,0.9,2,"1,3",Bayly and Kellow 
+Veronica_ochracea,0.4,2.7,,3.4,8,0.85,1.4,1.6,,,1,,Bayly and Kellow 
+Veronica_odora,0.9,4.5,11.5,5.4,,2.8,3.5,1.5,1.8,1.3,1,,Bayly and Kellow 
+Veronica_pareora,0.5,10,30,18,40,7,3,1.1,1.5,0.9,1,,Bayly and Kellow 
+Veronica_parviflora,7.5,17,60,7,80,10,3.8,3,,,2,,Bayly and Kellow 
+Veronica_pauciramosa,0.5,4.5,7,6,10,1.7,5,1.7,1.8,1.1,1,,Bayly and Kellow 
+Veronica_pentasepala,0.3,10,30,8,200,7,2.5,8,2.5,1,3,,Garnock Jones 1993
+Veronica_perbella,1.8,26,90,18,85,10,3,2.8,,,3,,Bayly and Kellow 
+Veronica_petriei,0.3,6,7.5,5,62,2.5,5.5,2,1.1,0.9,1,,Bayly and Kellow 
+Veronica_phormiiphila,5,26,86,11,150,19,3.5,2.1,1.3,1.1,2,1,Bayly and Kellow 
+Veronica_pimeleoides,0.5,10,12,5,12,5.5,1.5,2,1.3,1,3,2,Bayly and Kellow 
+Veronica_pinguifolia,0.4,7,16,9,22,2.8,3,1.5,1.7,1.1,1,,Bayly and Kellow 
+Veronica_planopetiolata,0.05,5,7,4,2,0.8,4,9,1,0.6,3,1,Garnock Jones & Lloyd 2004
+Veronica_poppelwellii,0.8,1.25,,3.2,12,1.3,2.5,1.6,,,1,,Bayly and Kellow 
+Veronica_propinqua,1,2.8,,2.4,,0.9,2.1,2.1,1,0.7,1,,Bayly and Kellow 
+Veronica_pubescens,2,21,95,25,130,15,5.5,1.7,1.9,1.5,3,1,Bayly and Kellow 
+Veronica_pulvinaris,0.04,,4.87,1.77,1,0.497,7.71,4.97,0.85,0.6,1,,Meudt 2008
+Veronica_punicea,0.7,23,75,25,57,9.6,5.5,,2.4,1.8,3,2,Bayly and Kellow 
+Veronica_quadrifaria,0.3,0.7,,2.4,6,0.5,1.1,1,1.2,0.7,3,1,Bayly and Kellow 
+Veronica_rakaiensis,2,6,20,7,48,4.5,1.4,1.4,1.6,1,1,,Bayly and Kellow 
+Veronica_raoulii,0.3,10,17,6,80,5,3,8,2,1.2,3,1,Garnock Jones 1993
+Veronica_rigidula,0.3,5,25,7.5,40,2.2,4,1.7,1.6,1.1,1,,Bayly and Kellow 
+Veronica_rivalis,1.2,18,85,9,81,8.4,2.5,1.8,1.4,1.1,2,1,Bayly and Kellow 
+Veronica_rupicola,0.8,9,21,7,37,3,4.9,2.3,2.2,1.4,1,,Bayly and Kellow 
+Veronica_salicifolia,2.5,18,106,18,250,18,3.2,1.8,1.1,0.2,2,1,Bayly and Kellow 
+Veronica_salicornioides,1,3.8,,,8,1.6,1.7,1.5,,,1,,Bayly and Kellow 
+Veronica_saxicola,0.8,,67,21,130,10,1.5,1.2,1.8,2,2,1,de Lange and Rolfe 2008
+Veronica_scopulorum,0.7,5,44,11,30,3.5,4.2,2,1.4,1.1,2,1,Bayly and Kellow 
+Veronica_scrupea,0.2,4,15,6,70,2,2,5,,,3,,Garnock Jones 1993
+Veronica_senex,0.35,30,40,18,20,25,2,12,0.8,0.6,1,,Garnock Jones & Lloyd 2004
+Veronica_simulans,1,6,16,7,10,3.1,3,2.5,,,1,,Bayly and Kellow 
+Veronica_societatis,0.3,6.5,24,8.5,25,3.5,2.5,1.5,,,1,,Bayly and Kellow 
+Veronica_spathulata,0.05,15,6,6,6,1.8,4,8,1.5,1.5,1,3,Garnock Jones & Lloyd 2004
+Veronica_speciosa,1,26,100,51,67,14.5,4,3.4,1.8,1.6,3,,Bayly and Kellow 
+Veronica_spectabilis,0.2,4,13,6,2,2.5,4.5,22,1,0.7,1,,Garnock Jones & Lloyd 2004
+Veronica_stenophylla,2,13,53,6.5,130,6.5,4.9,2,1.5,0.9,2,1,Bayly and Kellow 
+Veronica_stricta,4,49,106,45,300,21.5,5,2.4,1.2,1,2,1,Bayly and Kellow 
+Veronica_strictissima,2.5,13,41,7,72,7.7,2.9,1.7,1.6,1.3,1,"2,3",Bayly and Kellow 
+Veronica_subalpina,1.4,13,31,11,32,6,2.2,2.1,2,1.4,2,1,Bayly and Kellow 
+Veronica_subfulvida,1.8,11,32,6,88,3.6,4.3,2.6,2,1.4,3,1,Bayly and Kellow 
+Veronica_tairawhiti,3,15,100,11,180,15,3.5,1.8,1.2,1,2,1,Bayly and Kellow 
+Veronica_tetragona,0.6,1.6,3.2,3.5,12,1.2,2.1,2,1.5,1.1,1,,Bayly and Kellow 
+Veronica_tetrasticha,0.2,0.5,,3.5,6,0.7,1.5,1.5,1,0.7,1,,Bayly and Kellow 
+Veronica_thomsonii,0.006,,4.67,2.55,1,0.502,5.02,3.58,0.86,1.04,1,,Meudt 2008
+Veronica_topiaria,1.2,6,21,8,33,3,2.5,,2,1.3,1,,Bayly and Kellow 
+Veronica_townsonii,2.5,15,80,8,42,12,2.5,,1.4,1.3,3,1,Bayly and Kellow 
+Veronica_traversii,2.5,8,39,8,72,5,4.5,1.6,2.2,1.5,2,1,Bayly and Kellow 
+Veronica_treadwellii,0.3,10,29,12,34,3.1,3.5,2,1.5,1.1,1,,Bayly and Kellow 
+Veronica_trifida,0.15,5,10,6,2,2.5,3,20,0.8,0.6,1,3,Garnock Jones & Lloyd 2004
+Veronica_truncatula,2,10,42,8.5,68,7.5,3.2,1.7,,,2,1,Bayly and Kellow 
+Veronica_tumida,0.2,2.6,,2.5,8,0.9,1.8,1.5,1.1,1.2,1,,Bayly and Kellow 
+Veronica_urvilleana,1.5,6,18,6,23,3.1,2.2,2.2,,,1,,Bayly and Kellow 
+Veronica_venustula,1.4,6,20,8,75,5,4.2,2.6,2.2,1.3,2,1,Bayly and Kellow 
+Veronica_vernicosa,0.8,7,20,7.5,35,5,1.5,1.3,1.5,1.1,1,,Bayly and Kellow 
+Veronica_zygantha,0.07,10,7,6,2,1.5,3,6,1.3,0.7,1,,Garnock Jones & Lloyd 2004
