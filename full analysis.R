@@ -6,18 +6,23 @@
 #################################
 
 # Section 1 reading in and preparing data
-## 1.1 biome data
-## 1.2 phylogeny
-## 1.3 trait data
+# 1.1 phylogeny
+# 1.2 biome data
 
 # Section 2 biogeographic analysis - biome shifts
 # 2.1 model selection
 # 2.2 biogeographic stochastic mapping
 
 # section 3 trait-independent and dependent biogeographic analysis - biome effect on trait evolution
+## 3.1 sexual system
+## 3.2 additional models sexual system
+## 3.3 flower colour
 
 # section 4 analyses
-##
+## 4.1 trait change with biome shifts
+# 4.2 figure 2 phylogeny fan with flower colour, sexual system and biome
+# 4.3 modelling
+# 4.4 threshold model
 
 library(rexpokit)
 library(cladoRcpp)
@@ -39,10 +44,11 @@ extdata_dir = np(system.file("extdata", package="BioGeoBEARS"))
 extdata_dir
 list.files(extdata_dir)
 
-####read in phylogeny ####
+
+#### 1.1 read in phylogeny ####
 tr = read.tree("Veronica consensus.tree")
 
-#### prepaing biome data ####
+#### 1.2 prepaing biome data ####
 clade <- "Veronica"
 #alt_lat_bands.csv can be downloaded via https://github.com/annethomas/veronica-biogeo/raw/refs/heads/main/data/distribution_data/alt_lat_bands.csv
 biomes.df <- read.csv("alt_lat_bands.csv")
@@ -80,6 +86,27 @@ header <- paste(nrow(biomes), "2", "(L M)")#first row has number of spp and no. 
 
 write.table(header,file="geog_file.txt",quote=F,row.names=F,col.names = F)
 write.table(biomes,file="geog_file.txt",append=T,sep=' ',quote=F,row.names=F,col.names = F) #write dataframe to text file. Don't repeat cos will be repeated in text file
+
+####################################################################
+### 1.3 read in trait data ###
+####################################################################
+##### preparing sexual system data ###########
+#read in csv
+ver.df <- read.csv("Veronica sexual system data.csv")
+
+#tidy up checked gender column
+table(ver.df$Gender_literature)
+ver.df$Gender_literature[ver.df$Gender_literature==""] <- ver.df$Gender[ver.df$Gender_literature==""] #fill in blanks with McGlone and Richardson data
+ver.df$Gender_literature[ver.df$Gender_literature=="H or possibly GD"] <- "H"
+ver.df$Gender_literature[ver.df$Gender_literature=="H or GD"] <- "H"
+D_or_GD <- which(ver.df$Gender_literature=="D or GD") #species with multiple options
+ver.df$Gender_literature[D_or_GD] <- "D" #will treat as D initially
+
+#make binary gender column with gynodioecious and dioecious both as D for dimorphic
+ver.df$gender.binary <- gsub("GD", "D", traits$Gender_literature)
+
+saveRDS(ver.df, file="Veronica sexual system data.Rdata")
+
 
 ################ BiogeobBEARS model selection model selection #################
 trfn <- "Veronica consensus.tree"
@@ -1058,36 +1085,123 @@ MtoLM <- sum(totals['M->LM'], na.rm = T)
 
 # arrow sizes are these sums*0.2 e.g. 20 shifts per run would be size 4
 
+
+
+##########################################################################
+##### Section 3 biome dependent and independent biogeographic models #####
+##########################################################################
+
+
+#########################################################################
+##### 3.1 sexual system biome dependent and independent models
+###################################################################
+library(ape)
+library(castor)
+library(phytools)
+#read in the tree and the data
+veronica_tree = read.tree("Veronica consensus.tree")
+traits = read.csv("veronica_traits.csv")
+
+#fisher's exact test test of mountain presence vs. sexual system
+contable = table(traits$mountain, traits$sexual_system_binary)
+fisher.test(contable)
+
+#biome+sexual system models
+biome_reproductive = traits$single_variable
+names(biome_reproductive) = traits$species
+biome_reproductive = biome_reproductive[veronica_tree$tip.label]
+
+#models where biome (altitude) and reproductive type evolve independently
+model1 = cbind(c(0,0,2,3,0,0), c(0,0,2,0,3,0), c(1,1,0,0,0,3), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+model2 = cbind(c(0,0,2,4,0,0), c(0,0,2,0,4,0), c(1,1,0,0,0,4), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+
+#more complex models
+model3 = cbind(c(0,0,2,5,0,0), c(0,0,2,0,5,0), c(1,1,0,0,0,5), c(3,0,0,0,0,2), c(0,4,0,0,0,2), c(0,0,4,1,1,0))
+model4 = cbind(c(0,0,2,4,0,0), c(0,0,2,0,5,0), c(1,1,0,0,0,5), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+
+model5 = cbind(c(0,0,5,3,0,0), c(0,0,6,0,3,0), c(7,7,0,0,0,3), c(1,0,0,0,0,4), c(0,2,0,0,0,6), c(0,0,2,7,7,0))
+model6 = cbind(c(0,0,6,3,0,0), c(0,0,7,0,4,0), c(8,8,0,0,0,4), c(1,0,0,0,0,5), c(0,2,0,0,0,7), c(0,0,2,8,8,0))
+
+model7 = cbind(c(0,0,5,2,0,0), c(0,0,6,0,3,0), c(7,7,0,0,0,3), c(1,0,0,0,0,4), c(0,1,0,0,0,6), c(0,0,1,7,7,0))
+
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model1, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model2, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model3, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model4, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model5, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model6, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = biome_reproductive, rate_model = model7, root_prior = c(1,0,0,0,0,0), Ntrials = 10)
+
+#####################################################################
+##### 3.2 additional models sexual system
+#####################################################################
+library(ape)
+library(castor)
+library(phytools)
+#read in the tree and the data
+veronica_tree = read.tree("Veronica consensus.tree")
+traits = read.csv("veronica_traits.csv")
+
+#fisher's exact test test of mountain presence vs. sexual system
+contable = table(traits$mountain, traits$sexual_system_binary)
+fisher.test(contable)
+
+#biome+sexual system models
+alt_sexualsys = traits$single_variable
+names(alt_sexualsys) = traits$species
+alt_sexualsys = alt_sexualsys[veronica_tree$tip.label]
+alt_sexualsys = gsub("5", "4", alt_sexualsys)
+alt_sexualsys = as.integer(gsub("6", "5", alt_sexualsys))
+names(alt_sexualsys) = veronica_tree$tip.label
+
+#models where 
+model1a = cbind(c(0,0,2,0,0), c(0,0,2,3,0), c(1,1,0,0,3), c(0,3,0,0,2), c(0,0,3,1,0))
+model2a = cbind(c(0,0,2,0,0), c(0,0,2,4,0), c(1,1,0,0,4), c(0,3,0,0,2), c(0,0,3,1,0))
+
+fit_mk(trees = veronica_tree, Nstates = 5, tip_states = alt_sexualsys, rate_model = model1a, root_prior = c(1,0,0,0,0))
+fit_mk(trees = veronica_tree, Nstates = 5, tip_states = alt_sexualsys, rate_model = model2a, root_prior = c(1,0,0,0,0))
+
+#############################################################################
+########## 3.3 flower colour biome dependent and independent models
+#############################################################################
+library(ape)
+library(castor)
+library(phytools)
+#read in the tree and the colour data
+veronica_tree = read.tree("Veronica consensus.tree")
+traits = read.csv("veronica_traits2.csv")
+
+#fisher's exact test test of mountain presence vs. sexual system
+contable = table(traits$mountain, traits$white_flowers)
+fisher.test(contable)
+
+#biome+sexual system models
+alt_colour = traits$single_variable
+names(alt_colour) = traits$species
+alt_colour = alt_colour[veronica_tree$tip.label]
+
+#transition rate models 
+indep_sym = cbind(c(0,0,2,3,0,0), c(0,0,2,0,3,0), c(1,1,0,0,0,3), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+indep_asym = cbind(c(0,0,2,4,0,0), c(0,0,2,0,4,0), c(1,1,0,0,0,4), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+
+colourful_to_white_alt_dep = cbind(c(0,0,2,5,0,0), c(0,0,2,0,5,0), c(1,1,0,0,0,5), c(3,0,0,0,0,2), c(0,4,0,0,0,2), c(0,0,4,1,1,0))
+white_to_colourful_alt_dep = cbind(c(0,0,2,4,0,0), c(0,0,2,0,5,0), c(1,1,0,0,0,5), c(3,0,0,0,0,2), c(0,3,0,0,0,2), c(0,0,3,1,1,0))
+
+
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = alt_colour, rate_model = indep_sym, root_prior = c(1,0,0,0,0,0))
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = alt_colour, rate_model = indep_asym, root_prior = c(1,0,0,0,0,0))
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = alt_colour, rate_model = colourful_to_white_alt_dep, root_prior = c(1,0,0,0,0,0))
+fit_mk(trees = veronica_tree, Nstates = 6, tip_states = alt_colour, rate_model = white_to_colourful_alt_dep, root_prior = c(1,0,0,0,0,0))
+
+##########################################################################
+############## Section 4 Analyses ############
+##########################################################################
+
 ####################################################################
-##### preparing sexual system data ###########
-#read in csv
-ver.df <- read.csv("Veronica sexual system data.csv")
-
-#tidy up checked gender column
-table(ver.df$Gender_literature)
-ver.df$Gender_literature[ver.df$Gender_literature==""] <- ver.df$Gender[ver.df$Gender_literature==""] #fill in blanks with McGlone and Richardson data
-ver.df$Gender_literature[ver.df$Gender_literature=="H or possibly GD"] <- "H"
-ver.df$Gender_literature[ver.df$Gender_literature=="H or GD"] <- "H"
-D_or_GD <- which(ver.df$Gender_literature=="D or GD") #species with multiple options
-ver.df$Gender_literature[D_or_GD] <- "D" #will treat as D initially
-
-#make binary gender column with gynodioecious and dioecious both as D for dimorphic
-ver.df$gender.binary <- gsub("GD", "D", traits$Gender_literature)
-
-saveRDS(ver.df, file="Veronica sexual system data.Rdata")
-
-##########################################################################
-##### Section 2 biome dependent and independent biogeographic models #####
-##########################################################################
-
-############################################################################
-
-##########################################################################
-############## Section Analyses ############
-##########################################################################
-
-####################################################################
-###### modelling trait changes with biomes in Veronica #############
+###### 4.1 modelling trait changes with biomes in Veronica #############
 ####################################################################
 library(ape)
 library(BioGeoBEARS)
@@ -1237,7 +1351,10 @@ biomes.df$biomes.factor <- gsub("0", "", biomes.df$biomes.factor)
 biomes.df$biomes.factor <- as.factor(biomes.df$biomes.factor)
 biomes.df <- left_join(biomes.df, traits, by="species")
 
-#figure 1 density map of flower colour with ring of biome and sexual system and clades
+##############################################################
+#### 4.2 Figure 2 phylogeny with density map of flower colour with ring of biome and sexual system and clades
+##############################################################
+
 set.width <- rep(0.25, nrow(traits))
 names(set.width) <- traits$species
 set.width <- set.width[match(tr$tip.label, traits$species)] #order to match phylogeny
@@ -1445,7 +1562,7 @@ branches.actual.older.node.df[,6:7] <- branches.df[,6:7] #copy over biome occupa
 saveRDS(branches.df, "Trait and biome shifts by branch section Veronica full traits.Rdata")
 
 ##################################
-######## modelling ###############
+######## 4.3 modelling ###############
 ##################################
 
 #variance covariance matrix of nodes and tips
@@ -1553,38 +1670,6 @@ table.data <- res.trait.change.df[res.trait.change.df$shift.type %in% c("Shifts 
 table.data$mean.trait <- rep(mean.traits,3)
 table.data$coefficient.scaled <- table.data$coefficient.estimate/table.data$mean.trait
 
-# pdf(file="Model results heatmap cohensf2.pdf", height=10, width=8)
-# ggplot(table.data, aes(x = factor(shift.type, levels = c("Shifts into lowland", 
-#                                                          "Shifts into mountains", 
-#                                                          "Net shifts into mountains")), 
-#                        y = factor(trait, levels = rev(c("height.m", "Height.m","internode.mm", 
-#                                                         "leaf.length.mm", "leaf.width.mm", "leaf.area.cm2",
-#                                                        "no.Flowers","inflorescence.cm", 
-#                                                         "corolla.length.mm", "corolla.width.mm", "FlowerSize", "flower.area.mm2",
-#                                                         "corolla.colour", "dimorphic.prob", "colour.prob","seed.length.mm", 
-#                                                         "seed.width.mm", "seed.volume.mm3", "seedSize.mm"))))) +
-#   
-#   #make heatmap with geom_tile
-#   geom_tile(aes(fill = coefficient.scaled)) + #fill colour divided by mean trait values to scale it
-#   
-#   #add text of the coefficient estimate to the tile
-#   geom_text(aes(label = round(coefficient.estimate, digits = 2)), color = "white") + #values rounded to 2 dp
-#   #formatting
-#    scale_x_discrete(position = "top", labels = c("into L\n(total)","into M\n(total)", "into M\n(net)")) + #labels at top
-#   scale_y_discrete(labels = rev(c("Height (m)","Height (m) McGlone", "Internode length (mm)", "Leaf length (mm)","Leaf width (mm)", "Leaf area (cm2)",
-#                                 "Number of flowers","Inflorescence length (cm)","Corolla length (mm)", "Corolla width (mm)", "Flower size (mm)", "Flower area (mm2)",
-#                                   "Corolla colour", "Sexual system (probability of being dimorphic)","Corolla colour (probability of being colourful)", "Seed length (mm)", "Seed width (mm)", "Seed volume (mm3)", "Seed size (mm)"))) + #labels
-#   scale_fill_gradient2(high = "#D55E00", mid="white", low = "#0072B2") +
-#                    theme(legend.position = "bottom", legend.title.align = 0.5, legend.text = element_text(size=10),
-#                            panel.grid = element_blank(), 
-#                             panel.background = element_rect(fill = "white"),
-#                            axis.ticks = element_blank()) +
-#   geom_tile(data = table.data[table.data$cohens.f2.lower>0,], fill = NA, color = "black", linewidth = 0.75, height=1, width=1) + #outlines significant tiles in black
-#                        labs(y = "Traits", x="Biome shift type", fill="strength of\nassociation")
-# 
-# dev.off()
-
-
 table.data2 <- table.data[table.data$trait %in% res.trait.change.df.trimmed$trait,]
 table.data2$p.adjusted <-p.adjust(table.data2$p.value, "BH") 
 
@@ -1670,193 +1755,6 @@ ggplot(table.data2, aes(x = factor(shift.type, levels = c("Shifts into lowland",
 
 dev.off()
 
-# ########### trait value influence on biome shifts #################
-# ### trait value and end of branch vs. probability of being in the biome at the start
-# res.trait.value.younger.node.df <- data.frame("biome.prob.type"=character(), "trait"=character(), 
-#                          "coefficient.estimate"=numeric(), "coefficient.se"=numeric(),
-#                          "R.squared"=numeric(), "R.sq.CI.lower"=numeric(),"R.sq.CI.upper"=numeric(),"p.value"=numeric())
-# trait.names2 <- gsub("Change in ", "", trait.names)
-# 
-# biome.prob.young <- colnames(branches.actual.younger.node.df)[38:40]
-# biome.prob.old <- colnames(branches.actual.younger.node.df)[35:37]
-# biome.prob.names <- c("Probability of being L", "Probability of being M", "Probability of being LM")
-# 
-# pdf(file="Biome probabilities older vs trait actual values younger Veronica lm.pdf", height=15, width=8)
-# par(mfrow=c(4,3))
-# for(i in 1:length(biome.prob.old)){
-#   data.i <- branches.actual.younger.node.df[,c(which(colnames(branches.actual.younger.node.df)==biome.prob.old[i]), 16:34)]
-# 
-#   colnames(data.i)[1] <- "biome.prob.i"
-#   for(j in 1:length(trait.list)){
-#     data.j <- data.i[,c(1, grep(trait.list[j], colnames(data.i)))]
-#     colnames(data.j)[2] <- "trait.j"  
-#     data.j$trait.j <- data.j$trait.j/max(data.j$trait.j) #scale trait so are comparable
-#     if(trait.list[j] %in% c("seed.Size.mm", "colour.prob", "dimorphic.prob")){ #no-logged version for non skewed vars
-#       plot(jitter(data.j$trait.j,100)~jitter(data.j$biome.prob.i, 100), pch=19, xlab= biome.prob.names[i], ylab= trait.names2[j])
-#       model.j <- lm(trait.j~biome.prob.i, data=data.j)
-#       
-#     }else{ #logged version
-#       plot(jitter(log(data.j$trait.j),100)~jitter(data.j$biome.prob.i, 100), pch=19, xlab= biome.prob.names[i], ylab= trait.names2[j])
-#       model.j <- lm(log(trait.j)~biome.prob.i, data=data.j)
-#       
-#     }
-#    summary.j <- summary(model.j)
-#     if(summary.j$coefficients[2,4]<0.05){abline(a=summary.j$coefficients[1,1], b=summary.j$coefficients[2,1])}
-#     
-#     R.sq.ci <- CI.Rsq(summary.j$r.squared, n=nrow(branches.actual.younger.node.df), k=1, level=0.95)
-#     
-#     new.line <- c(biome.prob.old[i], trait.list[j], summary.j$coefficients[2,1:2], summary.j$r.squared, R.sq.ci[3:4], summary.j$coefficients[2,4])
-#     names(new.line) <- colnames(res.trait.value.younger.node.df)
-#     res.trait.value.younger.node.df <- rbind(res.trait.value.younger.node.df, new.line)
-#     
-#     
-#   }#j loop
-# }#i loop
-# 
-# dev.off()
-# 
-# res.trait.value.younger.node.df$cohens.f2 <- res.trait.value.younger.node.df$R.squared/(1-res.trait.value.younger.node.df$R.squared)
-# res.trait.value.younger.node.df$cohens.f2.lower <- res.trait.value.younger.node.df$R.sq.CI.lower/(1-res.trait.value.younger.node.df$R.sq.CI.lower)
-# res.trait.value.younger.node.df$cohens.f2.upper <- res.trait.value.younger.node.df$R.sq.CI.upper/(1-res.trait.value.younger.node.df$R.sq.CI.upper)
-# 
-# res.trait.value.younger.node.df$p.value.adjusted <- p.adjust(res.trait.value.younger.node.df$p.value, "BH")
-# 
-# res.trait.value.younger.node.df$mean.trait <-  rep(mean.traits,3)
-# 
-# res.trait.value.younger.node.df.trimmed <- res.trait.value.younger.node.df[res.trait.value.younger.node.df$trait %in% c("Height.m", "FlowerSize", "leaf.area.cm2","no.Flowers", "inflorescence.cm","internode.mm", "seedSize.mm", "colour.prob"),]
-# res.trait.value.younger.node.df.trimmed$p.value.adjusted<- p.adjust(res.trait.value.younger.node.df.trimmed$p.value, "BH")
-# 
-# pdf(file="Model results older biome probabilites and actual values younger traits heatmap.pdf", height=6, width=6)
-# ggplot(res.trait.value.younger.node.df.trimmed, aes(x = factor(biome.prob.type, levels = c("L.prob.older", "LM.prob.older",  "M.prob.older")), 
-#                                             y = factor(trait, levels = rev(c("Height.m","internode.mm", 
-#                                                                              "leaf.area.cm2",
-#                                                                              "no.Flowers","inflorescence.cm", 
-#                                                                               "FlowerSize", "dimorphic.prob",
-#                                                                              "colour.prob","seedSize.mm" ))))) +
-#   
-#   #make heatmap with geom_tile
-#   geom_tile(aes(fill = coefficient.estimate)) + #fill colour divided by mean trait values to scale it
-#   
-#   #add text of the coefficient estimate to the tile
-#   geom_text(aes(label = round(coefficient.estimate, digits = 2)), color = "white") + #values rounded to 2 dp
-#   #formatting
-#   scale_x_discrete(position = "top", labels = (c("L","LM", "M"))) + #labels at top
-# 
-#   scale_y_discrete(labels = rev(c("Height (m)","Internode length (mm)", "Leaf area (cm2)",
-#                                   "Number of flowers","Inflorescence length (cm)","Flower size (mm)",
-#                                   "Sexual system (probability of being dimorphic)",
-#                                   "Corolla colour (probability of being colourful)","Seed size (mm)"))) + #labels
-#    scale_fill_gradient2(high = "#D55E00", mid="white", low = "#0072B2", guide = "colourbar") +
-#   theme(legend.position = "bottom", legend.title.align = 0.5, legend.text = element_text(size=8),
-#         panel.grid = element_blank(), 
-#         panel.background = element_rect(fill = "white"),
-#         axis.ticks = element_blank()) +
-#   geom_tile(data = res.trait.value.younger.node.df.trimmed[res.trait.value.younger.node.df.trimmed$p.value.adjusted<0.05,], fill = NA, color = "black", linewidth = 0.75, height=0.96, width=0.98) + #outlines significant tiles in black
-#   labs(y = "Traits at end of branch", x="Biome (probability at start of branch)", fill="strength of\nassociation")
-# 
-# dev.off()
-# 
-# ### trait value at start of branch vs. probability of being in the biome at the end
-# res.trait.value.older.node.df <- data.frame("biome.prob.type"=character(), "trait"=character(), 
-#                                               "coefficient.estimate"=numeric(), "coefficient.se"=numeric(),
-#                                             "p.value"=numeric())
-#                                             
-# 
-# pdf(file="Biome probabilities younger vs trait actual values older Veronica glm.pdf", height=15, width=8)
-# par(mfrow=c(4,3))
-# for(i in 1:length(biome.prob.young)){
-#   data.i <- branches.actual.older.node.df[,c(which(colnames(branches.actual.older.node.df)==biome.prob.young[i]), 16:34)]
-#     colnames(data.i)[1] <- "biome.prob.i"
-#     data.i$biome.prob.i.binary <- round(data.i$biome.prob.i, digits=0)
-#   
-#   for(j in 1:length(trait.list)){
-#     data.j <- data.i[,c(1, 21,grep(trait.list[j], colnames(data.i)))]
-#     colnames(data.j)[3] <- "trait.j"  
-#     data.j$trait.j <- data.j$trait.j/max(data.j$trait.j) #scale trait
-#     # plot(jitter(data.j$biome.prob.i, 200)~jitter(data.j$trait.j,200), pch=19, ylab= biome.prob.names[i], xlab= trait.names2[j], xlim=c(0,max(data.j$trait.j)))
-#     # model.j <- pGLS(biome.prob.i~trait.j, data=data.j, covarmatrix = vcv)
-#     # abline(model.j)
-#     # if(model.j$coefficients[2,4]<0.05){abline(a=model.j$coefficients[1,1], b=model.j$coefficients[2,1], col="red", lwd=2)}
-#     # 
-#     if(trait.list[j] %in% c("seed.Size.mm", "colour.prob", "dimorphic.prob")){ #no-logged version for non skewed vars
-#       plot(jitter(data.j$biome.prob.i.binary,0.25)~jitter(data.j$trait.j, 100), pch=19, ylab= biome.prob.names[i], xlab= trait.names2[j])
-#       model.j <- glm(biome.prob.i.binary~trait.j, data=data.j, family="binomial")
-#       newdata <- data.frame("trait.j" =seq(min(data.j$trait.j), max(data.j$trait.j), length=20))
-#       
-#       predict.j <- predict.glm(model.j, newdata, type = "response")
-#       
-#     }else{ #logged version
-#       plot(jitter(data.j$biome.prob.i.binary,0.25)~jitter(log(data.j$trait.j),100), pch=19, ylab= biome.prob.names[i], xlab= paste("log", trait.names2[j], sep=" "))
-#       data.j$trait.j.log <- log(data.j$trait.j)
-#       model.j <- glm(biome.prob.i.binary~trait.j.log, data=data.j, family="binomial")
-#       newdata <- data.frame("trait.j.log" =seq(min(data.j$trait.j.log), max(data.j$trait.j.log), length=20))
-#       
-#      predict.j <- predict.glm(model.j, newdata, type = "response")
-#      
-#     }
-#     summary.j <- summary(model.j)
-#     if(summary.j$coefficients[2,4]<0.05){lines(predict.j~newdata[,1])}
-#     
-#     
-#   #    plot(jitter(data.j$trait.j,100)~jitter(data.j$biome.prob.i, 100), pch=19, xlab= biome.prob.names[i], ylab= trait.names2[j])
-#   # model.j <- pGLS(trait.j~biome.prob.i, data=data.j, covarmatrix = vcv)
-#   #if(model.j$coefficients[2,4]<0.05){abline(a=model.j$coefficients[1,1], b=model.j$coefficients[2,1])}
-# 
-#       
-#   #  R.sq.ci <- CI.Rsq(summary.j$r.squared, n=nrow(branches.actual.older.node.df), k=1, level=0.95)
-#     
-#     new.line <- c(biome.prob.young[i], trait.list[j], summary.j$coefficients[2,1:2], summary.j$coefficients[2,4])
-#     names(new.line) <- colnames(res.trait.value.older.node.df)
-#     res.trait.value.older.node.df[nrow(res.trait.value.older.node.df)+1,] <- new.line
-#     
-#     
-#   }#j loop
-# }#i loop
-# 
-# dev.off()
-# 
-# # res.trait.value.older.node.df$cohens.f2 <- res.trait.value.older.node.df$R.squared/(1-res.trait.value.older.node.df$R.squared)
-# # res.trait.value.older.node.df$cohens.f2.lower <- res.trait.value.older.node.df$R.sq.CI.lower/(1-res.trait.value.older.node.df$R.sq.CI.lower)
-# # res.trait.value.older.node.df$cohens.f2.upper <- res.trait.value.older.node.df$R.sq.CI.upper/(1-res.trait.value.older.node.df$R.sq.CI.upper)
-# 
-# res.trait.value.older.node.df$p.value.adjusted <- p.adjust(res.trait.value.older.node.df$p.value, "BH")
-# 
-# res.trait.value.older.node.df$mean.trait <-  rep(mean.traits,3)
-# 
-# res.trait.value.older.node.df.trimmed <- res.trait.value.older.node.df[res.trait.value.older.node.df$trait %in% c("Height.m", "FlowerSize", "leaf.area.cm2","no.Flowers", "inflorescence.cm","internode.mm", "seedSize.mm", "colour.prob", "dimoprhic.prob"),]
-# res.trait.value.older.node.df.trimmed$p.value.adjusted<- p.adjust(res.trait.value.older.node.df.trimmed$p.value, "BH")
-# 
-# res.trait.value.older.node.df.trimmed[,3:7] <- sapply(res.trait.value.older.node.df.trimmed[,3:7],as.numeric)
-# 
-# pdf(file="Model results younger biome probabilites and actual values older traits heatmap.pdf", height=6, width=6)
-# ggplot(res.trait.value.older.node.df.trimmed, aes(x = factor(biome.prob.type, levels = c("L.prob.younger", "LM.prob.younger",  "M.prob.younger")), 
-#                                                     y = factor(trait, levels = rev(c("Height.m","internode.mm", 
-#                                                                                      "leaf.area.cm2",
-#                                                                                      "no.Flowers","inflorescence.cm", 
-#                                                                                      "FlowerSize", "dimorphic.prob",
-#                                                                                      "colour.prob","seedSize.mm" ))))) +
-#   
-#   #make heatmap with geom_tile
-#   geom_tile(aes(fill = coefficient.estimate)) + #fill colour divided by mean trait values to scale it
-#   
-#   #add text of the coefficient estimate to the tile
-#   geom_text(aes(label = round(coefficient.estimate, digits = 2)), color = "white") + #values rounded to 2 dp
-#   #formatting
-#    scale_x_discrete(position = "top", labels = (c("L","LM", "M"))) + #labels at top
-# 
-#   scale_y_discrete(labels = rev(c("Height (m)","Internode length (mm)", "Leaf area (cm2)",
-#                                   "Number of flowers","Inflorescence length (cm)",
-#                                   "Flower size (mm)","Sexual system (probability of being dimorphic)",
-#                                   "Corolla colour (probability of being colourful)", "Seed size (mm)"))) + #labels
-#   scale_fill_gradient2(high = "#D55E00", mid="white", low = "#0072B2") +
-#   theme(legend.position = "bottom", legend.title.align = 0.5, legend.text = element_text(size=10),
-#         panel.grid = element_blank(), 
-#         panel.background = element_rect(fill = "white"),
-#         axis.ticks = element_blank()) +
-#   geom_tile(data = res.trait.value.older.node.df.trimmed[res.trait.value.older.node.df.trimmed$p.value.adjusted<0.05,], fill = NA, color = "black", linewidth = 0.75, height=0.96, width=0.98) + #outlines significant tiles in black
-#   labs(y = "Traits at start of branch", x="Biome (probability at end of branch)", fill="strength of\nassociation")
-# 
-# dev.off()
 
 ############## trait values by biome probability at nodes ##############
 node.biomes.df$node <- as.numeric(as.character(node.biomes.df$node))
@@ -1911,8 +1809,9 @@ for(i in 1:length(trait.list.selected)){
 }
 dev.off()
 
-
-#### threshold model biomes and binary traits ####
+##########################################################################
+#### 4.4 threshold model biomes and binary traits ####
+##########################################################################
 library(coda)
 
 thresh.df <- biomes.df[,c(1,4:5, 19)]
