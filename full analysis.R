@@ -1,8 +1,10 @@
 ################################
 # Analyses for Dale et al. Veronica sexual system and biome shift paper
 #phylogeny from Thomas et al. 2023 
+## section 2 adapted from scripts by Nick Matzke from http://phylo.wikidot.com/biogeobears
 # section 3 code written by Luke Liddell
-# all other sections written by Esther Dale
+# all other sections and adaptation of section 2 written by Esther Dale
+
 #################################
 
 # Section 1 reading in and preparing data
